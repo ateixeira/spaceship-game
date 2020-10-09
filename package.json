@@ -4,11 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "type-check": "tsc --noEmit",
-    "type-check:watch": "npm run type-check -- --watch",
     "build": "npm run build:types && npm run build:js",
     "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline"
+    "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
+    "bundle": "webpack",
+    "serve": "webpack-dev-server --open",
+    "watch": "webpack --watch",
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +22,11 @@
     "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-typescript": "^7.10.4",
-    "typescript": "^4.0.3"
+    "babel-loader": "^8.1.0",
+    "html-webpack-plugin": "^4.5.0",
+    "typescript": "^4.0.3",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   }
 }
