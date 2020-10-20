@@ -1,3 +1,4 @@
+import { randomNumber } from "./lib/helpers";
 import Star from "./star";
 
 export class SpaceshipGame {
@@ -27,9 +28,29 @@ export class SpaceshipGame {
     }
   }
 
+  private resizeCanvasIfNeeded() {
+    if (
+      this.canvas.width !== innerWidth ||
+      this.canvas.height !== innerHeight
+    ) {
+      this.canvas.width = innerWidth; // resize this.canvas
+      this.canvas.height = innerHeight; // also clears this.canvas
+      this.config();
+    } else {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+  }
+
   private draw() {
+    this.resizeCanvasIfNeeded();
     for (let star of this.stars) {
-      Star.draw(star.position.x, star.position.y, this.ctx);
+      Star.draw(
+        star.position.x,
+        star.position.y,
+        star.vertices,
+        star.size,
+        this.ctx
+      );
     }
 
     requestAnimationFrame(() => this.draw());
