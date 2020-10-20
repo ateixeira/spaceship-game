@@ -8,8 +8,8 @@ class Star {
 
   constructor(width: number, height: number) {
     this.position = Vector.random(0, width, 0, height);
-    this.size = randomNumber(1, 3);
-    this.vertices = randomNumber(5, 11);
+    this.size = randomNumber(1, 3, true);
+    this.vertices = randomNumber(5, 11, true);
   }
 
   public static draw(

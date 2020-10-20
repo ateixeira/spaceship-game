@@ -1,7 +1,7 @@
 export const randomNumber = (
   min: number = 0,
   max: number = 1,
-  integer: boolean = true
+  integer: boolean = false
 ) => {
   if (min > max) {
     throw new Error("Min should not be greather than max");

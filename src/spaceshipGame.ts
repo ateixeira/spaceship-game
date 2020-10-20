@@ -1,4 +1,3 @@
-import { randomNumber } from "./lib/helpers";
 import Star from "./star";
 
 export class SpaceshipGame {
