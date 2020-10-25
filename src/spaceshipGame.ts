@@ -1,3 +1,4 @@
+import Spaceship from "./spaceship";
 import Star from "./star";
 
 export class SpaceshipGame {
@@ -5,6 +6,7 @@ export class SpaceshipGame {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
   private stars: Star[] = [];
+  private spaceship: Spaceship;
 
   constructor() {
     this.canvas = document.createElement("canvas");
@@ -13,6 +15,8 @@ export class SpaceshipGame {
 
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
+
+    this.spaceship = new Spaceship(this.canvas.width, this.canvas.height);
 
     this.config();
 
@@ -53,6 +57,14 @@ export class SpaceshipGame {
         this.ctx
       );
     }
+
+    Spaceship.draw(
+      this.canvas.width / 2,
+      this.canvas.height / 2,
+      15,
+      60,
+      this.ctx
+    );
 
     requestAnimationFrame(() => this.draw());
   }
