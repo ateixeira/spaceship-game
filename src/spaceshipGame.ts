@@ -16,6 +16,8 @@ export class SpaceshipGame {
 
     this.config();
 
+    window.addEventListener("keydown", this.keyboardListener);
+
     requestAnimationFrame(() => this.draw());
   }
 
@@ -53,5 +55,30 @@ export class SpaceshipGame {
     }
 
     requestAnimationFrame(() => this.draw());
+  }
+
+  private keyboardListener(event: KeyboardEvent) {
+    switch (event.code) {
+      case "KeyS":
+      case "ArrowDown":
+        // Down key
+        console.log("Down");
+        break;
+      case "KeyW":
+      case "ArrowUp":
+        // Up key
+        console.log("Up");
+        break;
+      case "KeyA":
+      case "ArrowLeft":
+        // Left key
+        console.log("Left");
+        break;
+      case "KeyD":
+      case "ArrowRight":
+        // Right key
+        console.log("Right");
+        break;
+    }
   }
 }
