@@ -12,7 +12,7 @@ class Star {
     this.vertices = randomNumber(5, 11, true);
   }
 
-  public static draw(
+  public draw(
     cx: number,
     cy: number,
     vertices: number,

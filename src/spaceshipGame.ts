@@ -20,12 +20,13 @@ export class SpaceshipGame {
 
     this.config();
 
-    window.addEventListener("keydown", this.keyboardListener);
+    window.addEventListener("keydown", this.keyboardListener.bind(this));
 
     requestAnimationFrame(() => this.draw());
   }
 
   private config() {
+    // Stars
     this.stars = [];
     const { width, height } = this.canvas;
     for (let i = 0; i < this.STARCOUNT; i++) {
@@ -49,7 +50,7 @@ export class SpaceshipGame {
   private draw() {
     this.resizeCanvasIfNeeded();
     for (let star of this.stars) {
-      Star.draw(
+      star.draw(
         star.position.x,
         star.position.y,
         star.vertices,
@@ -58,11 +59,12 @@ export class SpaceshipGame {
       );
     }
 
-    Spaceship.draw(
-      this.canvas.width / 2,
-      this.canvas.height / 2,
+    this.spaceship.draw(
+      this.spaceship.position.x,
+      this.spaceship.position.y,
       15,
       60,
+      this.spaceship.rotation,
       this.ctx
     );
 
@@ -84,12 +86,12 @@ export class SpaceshipGame {
       case "KeyA":
       case "ArrowLeft":
         // Left key
-        console.log("Left");
+        this.spaceship.rotation += 15;
         break;
       case "KeyD":
       case "ArrowRight":
         // Right key
-        console.log("Right");
+        this.spaceship.rotation -= 15;
         break;
     }
   }
