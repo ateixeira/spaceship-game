@@ -12,34 +12,38 @@ class Spaceship {
   private drawBody(
     ctx: CanvasRenderingContext2D,
     width: number,
-    height: number
+    height: number,
+    spaceshipCenter: { x: number; y: number }
   ) {
-    const initialX = width / 2;
-    const initialY = height;
+    const bottomCenter = {
+      x: spaceshipCenter.x,
+      y: spaceshipCenter.y + height * 0.3,
+    };
+
     ctx.beginPath();
-    ctx.moveTo(initialX, initialY);
+    ctx.moveTo(bottomCenter.x, bottomCenter.y);
     // Half bottom line
-    ctx.lineTo(initialX + width * 0.3, initialY);
+    ctx.lineTo(bottomCenter.x + width * 0.3, bottomCenter.y);
     // Right curved line
     ctx.bezierCurveTo(
-      initialX + width,
-      initialY - height * 0.2,
-      initialX + width,
-      initialY - height * 0.8,
-      initialX,
-      0
+      bottomCenter.x + width,
+      bottomCenter.y - height * 0.2,
+      bottomCenter.x + width,
+      bottomCenter.y - height * 0.8,
+      bottomCenter.x,
+      bottomCenter.y - height
     );
     // Left curved line
     ctx.bezierCurveTo(
-      initialX - width,
-      initialY - height * 0.8,
-      initialX - width,
-      initialY - height * 0.2,
-      initialX - width * 0.3,
-      initialY
+      bottomCenter.x - width,
+      bottomCenter.y - height * 0.8,
+      bottomCenter.x - width,
+      bottomCenter.y - height * 0.2,
+      bottomCenter.x - width * 0.3,
+      bottomCenter.y
     );
     // Other half bottom line
-    ctx.lineTo(initialX, initialY);
+    ctx.lineTo(bottomCenter.x, bottomCenter.y);
     ctx.strokeStyle = "#F39C12";
     ctx.fillStyle = "#FFCF4B";
     ctx.fill();
@@ -52,23 +56,22 @@ class Spaceship {
   private drawRightFoot(
     ctx: CanvasRenderingContext2D,
     width: number,
-    height: number
+    height: number,
+    spaceshipCenter: { x: number; y: number }
   ) {
-    const initialX = width / 2;
-    const initialY = height;
     ctx.beginPath();
-    ctx.moveTo(initialX + width * 0.85, initialY - height * 0.35);
+    ctx.moveTo(spaceshipCenter.x + width * 0.85, spaceshipCenter.y);
     ctx.quadraticCurveTo(
-      initialX + width * 2,
-      initialY - height * 0.2,
-      initialX + width * 0.75,
-      initialY + height * 0.1
+      spaceshipCenter.x + width * 2,
+      spaceshipCenter.y + height * 0.2,
+      spaceshipCenter.x + width * 0.75,
+      spaceshipCenter.y + height * 0.45
     );
     ctx.quadraticCurveTo(
-      initialX + width * 1.4,
-      initialY - height * 0.1,
-      initialX + width * 0.7,
-      initialY - height * 0.15
+      spaceshipCenter.x + width * 1.2,
+      spaceshipCenter.y + height * 0.2,
+      spaceshipCenter.x + width * 0.6,
+      spaceshipCenter.y + height * 0.25
     );
     ctx.lineWidth = 1.3;
     ctx.fillStyle = "#2ECC71";
@@ -81,23 +84,22 @@ class Spaceship {
   private drawLeftFoot(
     ctx: CanvasRenderingContext2D,
     width: number,
-    height: number
+    height: number,
+    spaceshipCenter: { x: number; y: number }
   ) {
-    const initialX = width / 2;
-    const initialY = height;
     ctx.beginPath();
-    ctx.moveTo(initialX - width * 0.85, initialY - height * 0.35);
+    ctx.moveTo(spaceshipCenter.x - width * 0.85, spaceshipCenter.y);
     ctx.quadraticCurveTo(
-      initialX - width * 2,
-      initialY - height * 0.2,
-      initialX - width * 0.75,
-      initialY + height * 0.1
+      spaceshipCenter.x - width * 2,
+      spaceshipCenter.y + height * 0.2,
+      spaceshipCenter.x - width * 0.75,
+      spaceshipCenter.y + height * 0.45
     );
     ctx.quadraticCurveTo(
-      initialX - width * 1.4,
-      initialY - height * 0.1,
-      initialX - width * 0.7,
-      initialY - height * 0.15
+      spaceshipCenter.x - width * 1.2,
+      spaceshipCenter.y + height * 0.2,
+      spaceshipCenter.x - width * 0.6,
+      spaceshipCenter.y + height * 0.25
     );
     ctx.lineWidth = 1.3;
     ctx.fillStyle = "#2ECC71";
@@ -110,13 +112,14 @@ class Spaceship {
   private drawWindow(
     ctx: CanvasRenderingContext2D,
     width: number,
-    height: number
+    height: number,
+    spaceshipCenter: { x: number; y: number }
   ) {
-    const initialX = width / 2;
+    const initialX = spaceshipCenter.x;
     const windowRadius = width * 0.3;
-    const windowYPosition = height * 0.3;
+    const windowYPosition = spaceshipCenter.y - height * 0.3;
     ctx.beginPath();
-    ctx.moveTo(initialX + windowRadius, windowYPosition);
+    ctx.moveTo(spaceshipCenter.x + windowRadius, windowYPosition);
     ctx.arc(initialX, windowYPosition, windowRadius, 0, 2 * Math.PI);
     ctx.lineWidth = 1;
     ctx.fillStyle = "#1297E0";
@@ -129,23 +132,23 @@ class Spaceship {
   public draw(
     cx: number,
     cy: number,
-    width: number = 8,
-    height: number = 40,
+    size: number,
     rotation: number = 0,
     ctx: CanvasRenderingContext2D
   ) {
-    const centerX = width / 2;
-    const centerY = height * 0.7;
+    const width: number = size;
+    const height: number = 4 * size;
+    const spaceshipCenter = { x: cx, y: cy };
 
     ctx.save();
-    ctx.translate(cx + centerX, cy + centerY);
+    ctx.translate(cx, cy);
     ctx.rotate(rotation * (-Math.PI / 180));
-    ctx.translate(-centerX, -centerY);
+    ctx.translate(-cx, -cy);
 
-    this.drawBody(ctx, width, height);
-    this.drawWindow(ctx, width, height);
-    this.drawRightFoot(ctx, width, height);
-    this.drawLeftFoot(ctx, width, height);
+    this.drawBody(ctx, width, height, spaceshipCenter);
+    this.drawWindow(ctx, width, height, spaceshipCenter);
+    this.drawRightFoot(ctx, width, height, spaceshipCenter);
+    this.drawLeftFoot(ctx, width, height, spaceshipCenter);
 
     ctx.restore();
   }
