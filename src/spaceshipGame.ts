@@ -1,4 +1,4 @@
-import Analytics from "./analytics";
+// import Analytics from "./analytics";
 import Spaceship from "./spaceship";
 import Star from "./star";
 
@@ -8,7 +8,7 @@ export class SpaceshipGame {
   private ctx: CanvasRenderingContext2D;
   private stars: Star[] = [];
   private spaceship: Spaceship;
-  private analytics: Analytics;
+  // private analytics: Analytics;
   private pressedKeys: { [key: string]: boolean } = {};
 
   constructor() {
@@ -22,7 +22,7 @@ export class SpaceshipGame {
     // Create the Spaceship
     this.spaceship = new Spaceship(this.canvas.width, this.canvas.height);
 
-    this.analytics = new Analytics({ displayPanel: true }, this.ctx);
+    // this.analytics = new Analytics({ displayPanel: true }, this.ctx);
 
     this.config();
 
@@ -42,7 +42,7 @@ export class SpaceshipGame {
     }
 
     // Fps meter
-    this.analytics.start();
+    // this.analytics.start();
   }
 
   private resizeCanvasIfNeeded() {
@@ -59,7 +59,7 @@ export class SpaceshipGame {
   }
 
   private draw() {
-    this.analytics.tick();
+    // this.analytics.tick();
 
     // Responsivity
     this.resizeCanvasIfNeeded();
