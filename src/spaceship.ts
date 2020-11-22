@@ -1,12 +1,28 @@
 import Vector from "./lib/vector";
 
 class Spaceship {
-  public position: Vector;
-  public rotation: number;
+  private position: Vector;
+  private rotation: number;
+  public rotationSpeed: number;
+  public rotationRadians: number;
 
   constructor(width: number, height: number) {
     this.position = new Vector(width / 2, height / 2);
     this.rotation = 0;
+    this.rotationSpeed = 2.5;
+    this.rotationRadians = this.rotation / (Math.PI * 180);
+  }
+
+  get shipRotation(): number {
+    return this.rotation;
+  }
+
+  get shipPosition(): Vector {
+    return this.position;
+  }
+
+  set shipPosition(position: Vector) {
+    this.position = position;
   }
 
   private drawBody(
@@ -142,7 +158,7 @@ class Spaceship {
 
     ctx.save();
     ctx.translate(cx, cy);
-    ctx.rotate(rotation * (-Math.PI / 180));
+    ctx.rotate(this.rotationRadians);
     ctx.translate(-cx, -cy);
 
     this.drawBody(ctx, width, height, spaceshipCenter);
@@ -151,6 +167,14 @@ class Spaceship {
     this.drawLeftFoot(ctx, width, height, spaceshipCenter);
 
     ctx.restore();
+  }
+
+  public update(ctx: CanvasRenderingContext2D) {
+    this.rotationRadians = this.rotation / (Math.PI * 180);
+  }
+
+  public rotate(rotation: number) {
+    this.rotation += rotation;
   }
 }
 
