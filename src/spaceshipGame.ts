@@ -102,5 +102,11 @@ export class SpaceshipGame {
     if (this.pressedKeys["ArrowRight"] || this.pressedKeys["KeyD"]) {
       this.spaceship.rotate(this.spaceship.rotationSpeed * (180 / Math.PI));
     }
+
+    if (this.pressedKeys["ArrowUp"] || this.pressedKeys["KeyW"]) {
+      this.spaceship.isShipThrottling = true;
+    } else {
+      this.spaceship.isShipThrottling = false;
+    }
   }
 }

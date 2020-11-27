@@ -5,12 +5,20 @@ class Spaceship {
   private rotation: number;
   public rotationSpeed: number;
   public rotationRadians: number;
+  private speed: number;
+  private isAccelerating: boolean;
+  private acceleration: Vector;
+  private decceleration: number;
 
   constructor(width: number, height: number) {
     this.position = new Vector(width / 2, height / 2);
     this.rotation = 0;
     this.rotationSpeed = 2.5;
     this.rotationRadians = this.rotation / (Math.PI * 180);
+    this.speed = 0.2;
+    this.isAccelerating = false;
+    this.acceleration = new Vector(0, 0);
+    this.decceleration = 0.05;
   }
 
   get shipRotation(): number {
@@ -23,6 +31,14 @@ class Spaceship {
 
   set shipPosition(position: Vector) {
     this.position = position;
+  }
+
+  get isShipThrottling(): boolean {
+    return this.isAccelerating;
+  }
+
+  set isShipThrottling(isAccelerating: boolean) {
+    this.isAccelerating = isAccelerating;
   }
 
   private drawBody(
@@ -171,6 +187,30 @@ class Spaceship {
 
   public update(ctx: CanvasRenderingContext2D) {
     this.rotationRadians = this.rotation / (Math.PI * 180);
+
+    if (this.isAccelerating) {
+      const x = Math.sin(this.rotationRadians) * this.speed;
+      const y = -Math.cos(this.rotationRadians) * this.speed;
+      this.acceleration.add(new Vector(x, y));
+    } else {
+      const x = this.decceleration * this.acceleration.x;
+      const y = this.decceleration * this.acceleration.y;
+      this.acceleration.subtract(new Vector(x, y));
+    }
+
+    this.position.add(this.acceleration);
+
+    // handle edge of screen
+    if (this.position.x > ctx.canvas.width) {
+      this.position.x = 0;
+    } else if (this.position.y < 0) {
+      this.position.y = ctx.canvas.height;
+    }
+    if (this.position.y > ctx.canvas.height) {
+      this.position.y = 0;
+    } else if (this.position.x < 0) {
+      this.position.x = ctx.canvas.width;
+    }
   }
 
   public rotate(rotation: number) {
