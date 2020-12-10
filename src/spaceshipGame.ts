@@ -1,10 +1,11 @@
-// import Analytics from "./analytics";
+import Joystick from "./joystick";
 import Spaceship from "./spaceship";
 import Star from "./star";
 import Bullet from "./bullet";
 
 export class SpaceshipGame {
   private readonly STARCOUNT = 100;
+  private readonly SPACESHIP_HEIGHT = 15;
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
   private stars: Star[] = [];
@@ -12,6 +13,7 @@ export class SpaceshipGame {
   private spaceship: Spaceship;
   // private analytics: Analytics;
   private pressedKeys: { [key: string]: boolean } = {};
+  private joystick: Joystick;
 
   constructor() {
     // Create the canvas
@@ -22,9 +24,13 @@ export class SpaceshipGame {
     this.canvas.height = window.innerHeight;
 
     // Create the Spaceship
-    this.spaceship = new Spaceship(this.canvas.width, this.canvas.height);
+    this.spaceship = new Spaceship(
+      this.canvas.width,
+      this.canvas.height,
+      this.SPACESHIP_HEIGHT
+    );
 
-    // this.analytics = new Analytics({ displayPanel: true }, this.ctx);
+    this.joystick = new Joystick();
 
     this.config();
 
@@ -91,16 +97,30 @@ export class SpaceshipGame {
 
     const { shipPosition, shipRotation } = this.spaceship;
     // Draw the spaceship
-    this.spaceship.draw(
-      shipPosition.x,
-      shipPosition.y,
-      15,
-      shipRotation,
-      this.ctx
-    );
+    this.spaceship.draw(shipPosition.x, shipPosition.y, this.ctx);
+
+    if ("ontouchstart" in document.documentElement) {
+      this.ctx.canvas.addEventListener("touchstart", this.onTouchStart, false);
+      this.ctx.canvas.addEventListener("touchmove", this.onTouchMove, false);
+      this.ctx.canvas.addEventListener("touchend", this.onTouchEnd, false);
+      this.joystick.draw(this.ctx);
+    }
 
     // Game Loop
     requestAnimationFrame(() => this.draw());
+  }
+
+  private onTouchStart(e: TouchEvent) {
+    e.preventDefault();
+    console.log("onTouchStart handler");
+  }
+  private onTouchMove(e: TouchEvent) {
+    e.preventDefault();
+    console.log("onTouchMove handler");
+  }
+  private onTouchEnd(e: TouchEvent) {
+    e.preventDefault();
+    console.log("onTouchEnd handler");
   }
 
   private keyboardListener(event: KeyboardEvent) {

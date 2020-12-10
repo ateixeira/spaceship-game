@@ -9,8 +9,9 @@ class Spaceship {
   private isAccelerating: boolean;
   private acceleration: Vector;
   private decceleration: number;
+  private shipSize: number;
 
-  constructor(width: number, height: number) {
+  constructor(width: number, height: number, size: number) {
     this.position = new Vector(width / 2, height / 2);
     this.rotation = 0;
     this.rotationSpeed = 2.5;
@@ -19,6 +20,7 @@ class Spaceship {
     this.isAccelerating = false;
     this.acceleration = new Vector(0, 0);
     this.decceleration = 0.05;
+    this.shipSize = size;
   }
 
   get shipRotation(): number {
@@ -31,6 +33,10 @@ class Spaceship {
 
   set shipPosition(position: Vector) {
     this.position = position;
+  }
+
+  get shipNose() {
+    return new Vector(this.position.x, this.position.y + this.shipSize);
   }
 
   get isShipThrottling(): boolean {
@@ -161,15 +167,9 @@ class Spaceship {
     ctx.stroke();
   }
 
-  public draw(
-    cx: number,
-    cy: number,
-    size: number,
-    rotation: number = 0,
-    ctx: CanvasRenderingContext2D
-  ) {
-    const width: number = size;
-    const height: number = 4 * size;
+  public draw(cx: number, cy: number, ctx: CanvasRenderingContext2D) {
+    const width: number = this.shipSize;
+    const height: number = 4 * this.shipSize;
     const spaceshipCenter = { x: cx, y: cy };
 
     ctx.save();
