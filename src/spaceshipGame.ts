@@ -1,12 +1,14 @@
 // import Analytics from "./analytics";
 import Spaceship from "./spaceship";
 import Star from "./star";
+import Bullet from "./bullet";
 
 export class SpaceshipGame {
   private readonly STARCOUNT = 100;
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
   private stars: Star[] = [];
+  private bullets: Bullet[] = [];
   private spaceship: Spaceship;
   // private analytics: Analytics;
   private pressedKeys: { [key: string]: boolean } = {};
@@ -75,6 +77,15 @@ export class SpaceshipGame {
       );
     }
 
+    // Clean up out of boundaries bullets
+    this.bullets = this.bullets.filter((b: Bullet) => !!b.alive);
+
+    // Update and draw bullets
+    for (const bullet of this.bullets) {
+      bullet.update(this.ctx);
+      bullet.draw(bullet.position.x, bullet.position.y, this.ctx);
+    }
+
     // Update spaceship state
     this.spaceship.update(this.ctx);
 
@@ -107,6 +118,12 @@ export class SpaceshipGame {
       this.spaceship.isShipThrottling = true;
     } else {
       this.spaceship.isShipThrottling = false;
+    }
+
+    if (this.pressedKeys["Space"]) {
+      this.bullets.push(
+        new Bullet(this.spaceship.shipPosition, this.spaceship.rotationRadians)
+      );
     }
   }
 }
