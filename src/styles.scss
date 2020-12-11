@@ -33,19 +33,18 @@ body {
         display: block;
         animation: expand 2s;
       }
+      @keyframes expand {
+        from {
+          width: 0rem;
+        }
+        to {
+          width: 4rem;
+        }
+      }
     }
     .openButton {
       padding: 0.2rem;
       cursor: pointer;
     }
-  }
-}
-
-@keyframes expand {
-  from {
-    width: 0rem;
-  }
-  to {
-    width: 4rem;
   }
 }
