@@ -49,7 +49,7 @@ export class SpaceshipGame {
     );
 
     this.analytics = new Analytics();
-    this.joystick = new Joystick();
+    this.joystick = new Joystick(this.ctx);
 
     this.config();
 
@@ -67,9 +67,6 @@ export class SpaceshipGame {
     for (let i = 0; i < this.STARCOUNT; i++) {
       this.stars.push(new Star(width, height));
     }
-
-    // Fps meter
-    // this.analytics.start();
   }
 
   private resizeCanvasIfNeeded() {
@@ -115,32 +112,15 @@ export class SpaceshipGame {
     // Update spaceship state
     this.spaceship.update(this.ctx);
 
-    const { shipPosition, shipRotation } = this.spaceship;
+    const { shipPosition } = this.spaceship;
     // Draw the spaceship
     this.spaceship.draw(shipPosition.x, shipPosition.y, this.ctx);
 
-    if ("ontouchstart" in document.documentElement) {
-      this.ctx.canvas.addEventListener("touchstart", this.onTouchStart, false);
-      this.ctx.canvas.addEventListener("touchmove", this.onTouchMove, false);
-      this.ctx.canvas.addEventListener("touchend", this.onTouchEnd, false);
-      this.joystick.draw(this.ctx);
-    }
+    // Draw the joystick
+    this.joystick.draw();
 
     // Game Loop
     requestAnimationFrame(() => this.draw());
-  }
-
-  private onTouchStart(e: TouchEvent) {
-    e.preventDefault();
-    console.log("onTouchStart handler");
-  }
-  private onTouchMove(e: TouchEvent) {
-    e.preventDefault();
-    console.log("onTouchMove handler");
-  }
-  private onTouchEnd(e: TouchEvent) {
-    e.preventDefault();
-    console.log("onTouchEnd handler");
   }
 
   private keyboardListener(event: KeyboardEvent) {
