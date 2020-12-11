@@ -1,3 +1,4 @@
+import Analytics from "./analytics";
 import Joystick from "./joystick";
 import Spaceship from "./spaceship";
 import Star from "./star";
@@ -7,11 +8,12 @@ export class SpaceshipGame {
   private readonly STARCOUNT = 100;
   private readonly SPACESHIP_HEIGHT = 15;
   private canvas: HTMLCanvasElement;
+  private infoPanel: HTMLDivElement;
   private ctx: CanvasRenderingContext2D;
   private stars: Star[] = [];
   private bullets: Bullet[] = [];
   private spaceship: Spaceship;
-  // private analytics: Analytics;
+  private analytics: Analytics;
   private pressedKeys: { [key: string]: boolean } = {};
   private joystick: Joystick;
 
@@ -23,6 +25,22 @@ export class SpaceshipGame {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
 
+    // Create the stats panel
+    this.infoPanel = document.createElement("div");
+    this.infoPanel.className = "infoPanel open";
+    const statsPanel: HTMLDivElement = document.createElement("div");
+    statsPanel.className = "statsPanel";
+    const openButton: HTMLDivElement = document.createElement("div");
+    openButton.className = "openButton";
+    openButton.innerHTML = ">";
+    openButton.addEventListener("click", () =>
+      this.infoPanel.classList.toggle("open")
+    );
+
+    statsPanel.appendChild(openButton);
+    statsPanel.appendChild(this.infoPanel);
+    document.body.appendChild(statsPanel);
+
     // Create the Spaceship
     this.spaceship = new Spaceship(
       this.canvas.width,
@@ -30,6 +48,7 @@ export class SpaceshipGame {
       this.SPACESHIP_HEIGHT
     );
 
+    this.analytics = new Analytics();
     this.joystick = new Joystick();
 
     this.config();
@@ -67,7 +86,8 @@ export class SpaceshipGame {
   }
 
   private draw() {
-    // this.analytics.tick();
+    const stats = this.analytics.tick();
+    this.infoPanel.innerHTML = `FPS: ${stats.fps}`;
 
     // Responsivity
     this.resizeCanvasIfNeeded();
