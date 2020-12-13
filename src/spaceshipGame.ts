@@ -16,6 +16,7 @@ export class SpaceshipGame {
   private analytics: Analytics;
   private pressedKeys: { [key: string]: boolean } = {};
   private joystick: Joystick;
+  private isMobile: boolean = false;
 
   constructor() {
     // Create the canvas
@@ -48,14 +49,16 @@ export class SpaceshipGame {
       this.SPACESHIP_HEIGHT
     );
 
-    this.analytics = new Analytics();
-    this.joystick = new Joystick(this.ctx);
-
     this.config();
 
+    this.analytics = new Analytics();
+    this.joystick = new Joystick(this.ctx, this.isMobile);
+
     // Listeners
-    window.addEventListener("keydown", this.keyboardListener.bind(this));
-    window.addEventListener("keyup", this.keyboardListener.bind(this));
+    if (!this.isMobile) {
+      window.addEventListener("keydown", this.keyboardListener.bind(this));
+      window.addEventListener("keyup", this.keyboardListener.bind(this));
+    }
 
     requestAnimationFrame(() => this.draw());
   }
@@ -66,6 +69,11 @@ export class SpaceshipGame {
     const { width, height } = this.canvas;
     for (let i = 0; i < this.STARCOUNT; i++) {
       this.stars.push(new Star(width, height));
+    }
+
+    // Is Mobile ?
+    if ("ontouchstart" in document.documentElement) {
+      this.isMobile = true;
     }
   }
 
@@ -109,15 +117,27 @@ export class SpaceshipGame {
       bullet.draw(bullet.position.x, bullet.position.y, this.ctx);
     }
 
+    if (this.isMobile) {
+      // Draw the joystick
+      this.joystick.draw();
+
+      if (this.joystick.moveX !== 0 || this.joystick.moveY !== 0) {
+        this.spaceship.isShipThrottling = true;
+      } else {
+        this.spaceship.isShipThrottling = false;
+      }
+
+      if (!!this.joystick.angle) {
+        this.spaceship.rotateToAngle(this.joystick.angle);
+      }
+    }
+
     // Update spaceship state
     this.spaceship.update(this.ctx);
 
     const { shipPosition } = this.spaceship;
     // Draw the spaceship
     this.spaceship.draw(shipPosition.x, shipPosition.y, this.ctx);
-
-    // Draw the joystick
-    this.joystick.draw();
 
     // Game Loop
     requestAnimationFrame(() => this.draw());
@@ -127,11 +147,11 @@ export class SpaceshipGame {
     this.pressedKeys[event.code] = event.type === "keydown";
 
     if (this.pressedKeys["ArrowLeft"] || this.pressedKeys["KeyA"]) {
-      this.spaceship.rotate(-this.spaceship.rotationSpeed * (180 / Math.PI));
+      this.spaceship.rotate(-this.spaceship.rotationSpeed);
     }
 
     if (this.pressedKeys["ArrowRight"] || this.pressedKeys["KeyD"]) {
-      this.spaceship.rotate(this.spaceship.rotationSpeed * (180 / Math.PI));
+      this.spaceship.rotate(this.spaceship.rotationSpeed);
     }
 
     if (this.pressedKeys["ArrowUp"] || this.pressedKeys["KeyW"]) {

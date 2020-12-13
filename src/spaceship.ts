@@ -1,8 +1,9 @@
+import { degreesToRadians } from "./lib/helpers";
 import Vector from "./lib/vector";
 
 class Spaceship {
   private position: Vector;
-  private rotation: number;
+  public rotation: number;
   public rotationSpeed: number;
   public rotationRadians: number;
   private speed: number;
@@ -14,8 +15,8 @@ class Spaceship {
   constructor(width: number, height: number, size: number) {
     this.position = new Vector(width / 2, height / 2);
     this.rotation = 0;
-    this.rotationSpeed = 2.5;
-    this.rotationRadians = this.rotation / (Math.PI * 180);
+    this.rotationSpeed = 8.5;
+    this.rotationRadians = degreesToRadians(this.rotation);
     this.speed = 0.2;
     this.isAccelerating = false;
     this.acceleration = new Vector(0, 0);
@@ -25,14 +26,6 @@ class Spaceship {
 
   get shipRotation(): number {
     return this.rotation;
-  }
-
-  get shipPosition(): Vector {
-    return this.position;
-  }
-
-  set shipPosition(position: Vector) {
-    this.position = position;
   }
 
   get shipNose() {
@@ -45,6 +38,14 @@ class Spaceship {
 
   set isShipThrottling(isAccelerating: boolean) {
     this.isAccelerating = isAccelerating;
+  }
+
+  get shipPosition(): Vector {
+    return this.position;
+  }
+
+  set shipPosition(position: Vector) {
+    this.position = position;
   }
 
   private drawBody(
@@ -186,7 +187,7 @@ class Spaceship {
   }
 
   public update(ctx: CanvasRenderingContext2D) {
-    this.rotationRadians = this.rotation / (Math.PI * 180);
+    this.rotationRadians = degreesToRadians(this.rotation);
 
     if (this.isAccelerating) {
       const x = Math.sin(this.rotationRadians) * this.speed;
@@ -211,6 +212,10 @@ class Spaceship {
     } else if (this.position.x < 0) {
       this.position.x = ctx.canvas.width;
     }
+  }
+
+  public rotateToAngle(angle: number) {
+    this.rotation = angle;
   }
 
   public rotate(rotation: number) {
