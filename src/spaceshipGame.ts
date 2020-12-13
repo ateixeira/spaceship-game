@@ -46,7 +46,7 @@ export class SpaceshipGame {
     this.spaceship = new Spaceship(
       this.canvas.width,
       this.canvas.height,
-      this.SPACESHIP_HEIGHT
+      this.isMobile ? this.SPACESHIP_HEIGHT : this.SPACESHIP_HEIGHT / 1.4
     );
 
     this.config();
@@ -121,7 +121,7 @@ export class SpaceshipGame {
       // Draw the joystick
       this.joystick.draw();
 
-      if (this.joystick.moveX !== 0 || this.joystick.moveY !== 0) {
+      if (this.joystick.stickX !== 0 || this.joystick.stickY !== 0) {
         this.spaceship.isShipThrottling = true;
       } else {
         this.spaceship.isShipThrottling = false;

@@ -1,5 +1,6 @@
 import {
   angleForPointInCircumference,
+  distanceBetweenPoints,
   isPointInCircumference,
 } from "./lib/helpers";
 import Vector from "./lib/vector";
@@ -8,6 +9,7 @@ class Joystick {
   private position: Vector;
   private stickPosition: Vector;
   private centerPosition: Vector;
+  private isPressed: boolean = false;
   private ctx: CanvasRenderingContext2D;
 
   private readonly joystickOffset: number = 70;
@@ -53,11 +55,11 @@ class Joystick {
     return this.position.y;
   }
 
-  public get moveX() {
+  public get stickX() {
     return this.stickPosition.x - this.centerPosition.x;
   }
 
-  public get moveY() {
+  public get stickY() {
     return this.stickPosition.y - this.centerPosition.y;
   }
 
@@ -84,7 +86,7 @@ class Joystick {
     );
     ctx.lineWidth = 1;
     ctx.strokeStyle = "black";
-    ctx.fillStyle = "red";
+    ctx.fillStyle = "rgba(222, 222, 222, 0.5)";
     ctx.stroke();
     ctx.fill();
   }
@@ -100,13 +102,14 @@ class Joystick {
     );
     ctx.lineWidth = 1;
     ctx.strokeStyle = "black";
-    ctx.fillStyle = "yellow";
+    ctx.fillStyle = "rgba(244, 244, 244, 0.8)";
     ctx.stroke();
     ctx.fill();
   }
 
   private onTouchStart(e: TouchEvent) {
     e.preventDefault();
+    this.isPressed = true;
   }
 
   private onTouchMove(e: TouchEvent) {
@@ -119,16 +122,17 @@ class Joystick {
       diffRadius
     );
 
-    if (isInsideJoystick) {
+    if (this.isPressed) {
       this.position.x = pageX;
-      this.stickPosition.x = pageX;
       this.position.y = pageY;
+      this.stickPosition.x = pageX;
       this.stickPosition.y = pageY;
     }
   }
 
   private onTouchEnd(e: TouchEvent) {
     e.preventDefault();
+    this.isPressed = false;
     this.stickPosition.x = this.centerPosition.x;
     this.stickPosition.y = this.centerPosition.y;
   }
