@@ -1,4 +1,5 @@
-import { randomNumber } from "./helpers";
+import { distanceBetweenPoints, randomNumber } from "./helpers";
+import Vector from "./vector";
 
 describe("Helpers", () => {
   describe("randomNumber", () => {
@@ -22,6 +23,19 @@ describe("Helpers", () => {
       expect(randomNumber(1, 10, false).toString()).toMatch(
         /^[-+]?[0-9]*\.?[0-9]+$/
       );
+    });
+  });
+  describe("distanceBetweenPoints", () => {
+    it("calculates correctly", async () => {
+      const p1 = new Vector(0, 0);
+      const p2 = new Vector(0, -7);
+      const p3 = new Vector(4, 8);
+      const p4 = new Vector(3, 14);
+      const p5 = new Vector(12, 8);
+      expect(distanceBetweenPoints(p1, p2)).toBe(7);
+      expect(distanceBetweenPoints(p1, p3)).toBe(8.94427190999916);
+      expect(distanceBetweenPoints(p1, p4)).toBe(14.317821063276353);
+      expect(distanceBetweenPoints(p1, p5)).toBe(14.422205101855956);
     });
   });
 });
